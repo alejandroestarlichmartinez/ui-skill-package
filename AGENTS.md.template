@@ -1,0 +1,74 @@
+# UI Skills - Agent Configuration
+# Add this section to your project's AGENTS.md or CLAUDE.md
+
+## UI Skills Integration
+
+UI Skills provide quality constraints for frontend development. These are behavioral guidelines that prevent common AI-generated interface issues.
+
+### Available Skills
+
+| Skill | Trigger | Purpose |
+|-------|---------|---------|
+| `/baseline-ui` | "apply constraints", "review UI", "check Tailwind" | Tailwind + motion constraints |
+| `/frontend-design` | "design review", "anti-generic", "distinctive UI" | Anti-generic design guidance |
+| `/ui-ux-pro-max` | "comprehensive UI", "professional interface" | Full UI/UX intelligence |
+| `/next-best-practices` | "Next.js patterns", "App Router" | Next.js conventions |
+| `/react-best-practices` | "React patterns", "component architecture" | React best practices |
+| `/shadcn` | "shadcn/ui", "component workflow" | shadcn component patterns |
+| `/make-interfaces-feel-better` | "polish UI", "micro-interactions" | Interface polish |
+| `/interaction-design` | "microinteractions", "delightful UX" | Interaction patterns |
+| `/swiss-design` | "grid discipline", "typography", "editorial" | Swiss design system |
+| `/12-principles-of-animation` | "add animation", "motion design" | Animation principles |
+| `/fixing-accessibility` | "a11y audit", "WCAG", "accessibility" | Accessibility compliance |
+
+### Skill Selection Rules
+
+**When starting a new UI feature:**
+1. If using Tailwind → Load `baseline-ui`
+2. If using Next.js → Load `next-best-practices`
+3. If using React → Load `react-best-practices`
+4. If design feels generic → Load `frontend-design`
+
+**When reviewing existing UI:**
+1. Load `baseline-ui <file>` to check constraints
+2. Load `fixing-accessibility` for WCAG audit
+3. Load `make-interfaces-feel-better` for polish pass
+
+**When adding animations:**
+1. Load `12-principles-of-animation` for motion quality
+2. Load `interaction-design` for microinteractions
+
+**When working on design systems:**
+1. Load `swiss-design` for grid/typography discipline
+2. Load `shadcn` for component workflow
+3. Load `baseline-ui` for constraint enforcement
+
+### Installation
+
+```bash
+# Install core skills
+~/Documentos/ai/ui-skills/install.sh --default
+
+# Install framework-specific
+~/Documentos/ai/ui-skills/install.sh --framework-set
+
+# Install all
+~/Documentos/ai/ui-skills/install.sh --all
+```
+
+### Quality Gates
+
+Before completing UI work:
+1. Run `/baseline-ui <file>` to check constraints
+2. Verify accessibility with `/fixing-accessibility`
+3. Check motion quality (if animated) with `/12-principles-of-animation`
+
+### Important Notes
+
+- These skills are **constraints**, not creativity killers
+- Not every rule applies to every situation - use judgment
+- For trivial tasks, some rules can be relaxed
+- When skills conflict, prioritize:
+  1. Framework-specific skills (next-best-practices)
+  2. Core quality (baseline-ui)
+  3. Design guidance (frontend-design)
