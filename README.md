@@ -396,3 +396,4 @@ MIT - Same as original ui-skills project.
 
 **Remember:** These skills are constraints, not creativity killers. They prevent common AI coding pitfalls while leaving room for good design decisions.
 # ui-skill-package
+# ui-skill-package
