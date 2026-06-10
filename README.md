@@ -39,40 +39,80 @@ This is a **curated subset** of [ui-skills.com](https://ui-skills.com/) - select
 |-------|--------|---------|-------------|
 | `fixing-accessibility` | ibelick | WCAG audit & fixes | Accessibility review |
 
-## 🚀 Installation
+## 🚀 Installation (Per-Project)
 
-### Method 1: Install All Skills (Recommended for new projects)
+**UI Skills are installed per-project**, not globally. This ensures each project only has the skills it needs, and they're versioned with the project.
+
+### Quick Start
 
 ```bash
-# Clone this repo
-git clone https://github.com/your-username/ui-skills.git ~/Documentos/ai/ui-skills
-
-# Navigate to your project
+# 1. Navigate to your project
 cd /path/to/your/project
 
-# Install all skills
+# 2. Install default skills (baseline-ui + frontend-design)
+~/Documentos/ai/ui-skills/install.sh --default
+
+# 3. Done! Skills are now in ./.ai/skills/
+```
+
+### Installation Methods
+
+#### Method 1: Auto-Detect (Recommended)
+
+Automatically detects your framework and installs relevant skills:
+
+```bash
+cd /path/to/your/project
+~/Documentos/ai/ui-skills/install.sh --detect
+```
+
+This will:
+- Detect if you use Next.js, React, or generic
+- Check for Tailwind CSS
+- Recommend and install appropriate skills
+- Create `.ai/config.toml` with configuration
+- Update `AGENTS.md` with usage guide
+
+#### Method 2: Install Sets
+
+```bash
+# Core quality skills
+~/Documentos/ai/ui-skills/install.sh --default
+
+# Framework-specific (Next.js + React + shadcn)
+~/Documentos/ai/ui-skills/install.sh --framework-set
+
+# Design quality
+~/Documentos/ai/ui-skills/install.sh --design-set
+
+# Animation
+~/Documentos/ai/ui-skills/install.sh --animation-set
+
+# Accessibility
+~/Documentos/ai/ui-skills/install.sh --accessibility
+
+# Everything
 ~/Documentos/ai/ui-skills/install.sh --all
 ```
 
-### Method 2: Install Selective Skills
+#### Method 3: Install Specific Skills
 
 ```bash
-# Install only specific skills
+# Install only what you need
 ~/Documentos/ai/ui-skills/install.sh baseline-ui next-best-practices react-best-practices
 
-# Install framework-specific set
-~/Documentos/ai/ui-skills/install.sh next-best-practices react-best-practices shadcn
-
-# Install design quality set
-~/Documentos/ai/ui-skills/install.sh baseline-ui frontend-design make-interfaces-feel-better
+# Or mix and match
+~/Documentos/ai/ui-skills/install.sh baseline-ui fixing-accessibility
 ```
 
-### Method 3: Per-Project Manual Installation
+#### Method 4: Manual (Not Recommended)
 
 ```bash
-# Copy specific skills to your project
-cp ~/Documentos/ai/ui-skills/skills/ibelick-baseline-ui.md .opencode/skills/baseline-ui/SKILL.md
-cp ~/Documentos/ai/ui-skills/skills/vercel-labs-next-best-practices.md .opencode/skills/next-best-practices/SKILL.md
+# Create directory
+mkdir -p .ai/skills/baseline-ui
+
+# Copy skill
+cp ~/Documentos/ai/ui-skills/skills/ibelick-baseline-ui.md .ai/skills/baseline-ui/SKILL.md
 ```
 
 ## 🎨 Usage
@@ -121,11 +161,14 @@ Once installed, invoke skills during your conversation:
 
 ## 📁 Structure
 
+### Global Toolkit (this repo)
+
 ```
-ui-skills/
+~/Documentos/ai/ui-skills/
 ├── README.md                          # This file
-├── install.sh                         # Installation script
-├── skills/                            # Curated skills
+├── install.sh                         # Per-project installer
+├── setup.sh                           # Auto-setup for projects
+├── skills/                            # Curated skill sources
 │   ├── ibelick-baseline-ui.md
 │   ├── anthropics-frontend-design.md
 │   ├── nextlevelbuilder-ui-ux-pro-max.md
@@ -138,6 +181,22 @@ ui-skills/
 │   ├── raphaelsalaja-12-principles-of-animation.md
 │   └── ibelick-fixing-accessibility.md
 └── .gitignore
+```
+
+### Per-Project (after install)
+
+```
+your-project/
+├── .ai/                               # AI configuration
+│   ├── skills/                        # Installed skills for THIS project
+│   │   ├── baseline-ui/
+│   │   │   └── SKILL.md
+│   │   ├── next-best-practices/
+│   │   │   └── SKILL.md
+│   │   └── ...
+│   └── config.toml                    # Skills configuration
+├── AGENTS.md                          # Updated with UI Skills section
+└── .gitignore                         # .ai/skills/ added
 ```
 
 ## 🔧 How It Works
