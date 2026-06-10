@@ -215,29 +215,25 @@ install_skill() {
 # Create or update .ai/config.toml
 create_project_config() {
   local config_dir="$PROJECT_DIR/.ai"
-  local config_file="$config_dir/config.toml"
+  local config_file="$config_dir/ui-skills.toml"
   
   mkdir -p "$config_dir"
   
   if [ ! -f "$config_file" ]; then
     cat > "$config_file" << EOF
-# UI Skills Configuration
-# This file tells agents which skills are available in this project
+# UI Skills - Project Metadata
+# This file is optional. It documents which UI Skills are installed.
+# Agents discover skills by scanning ./.ai/skills/*/, not by reading this file.
 
-[skills]
-source = "./skills"
-auto_load = ["baseline-ui", "frontend-design"]
+[ui-skills]
+installed = ["baseline-ui", "frontend-design"]
+source = "~/Documentos/ai/ui-skills"
 
-[skills.framework]
-# Set your framework for better skill suggestions
-# Options: nextjs, react, vue, svelte, generic
+[ui-skills.framework]
+# Detected framework (for documentation only)
 name = "auto-detected"
-
-[skills.quality]
-# Quality gates to run before completing UI work
-gates = ["baseline-ui", "fixing-accessibility"]
 EOF
-    print_success "Created .ai/config.toml"
+    print_success "Created .ai/ui-skills.toml (optional metadata)"
   fi
 }
 

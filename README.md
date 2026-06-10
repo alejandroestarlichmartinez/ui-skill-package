@@ -201,58 +201,70 @@ your-project/
 
 ## 🔧 How It Works
 
-### For Agents (Subagents)
+### Architecture: Per-Project Skills (Independent)
 
-When an agent is working on a frontend task, it should:
+UI Skills are **completely independent** from OpenCode's global skill registry. They live in `./.ai/skills/` inside each project and are discovered dynamically.
 
-1. **Detect the context:**
-   - Is this a new UI feature or reviewing existing?
-   - What framework is being used (React, Next.js, Vue)?
-   - Is Tailwind being used?
+**Key differences from global skills:**
+- **Not in skill registry** — UI Skills don't appear in `~/.config/opencode/.atl/skill-registry.md`
+- **Dynamic discovery** — Agents scan `./.ai/skills/*/` for `SKILL.md` files at runtime
+- **Project-only** — No global installation, no contamination of OpenCode config
+- **Self-contained** — Each project manages its own skills independently
 
-2. **Load relevant skills:**
-   ```bash
-   # Agent loads skills based on context
-   if [framework == "next.js"]; then load next-best-practices
-   if [using_tailwind]; then load baseline-ui
-   if [adding_animation]; then load 12-principles-of-animation
-   ```
+### Skill Discovery
 
-3. **Apply constraints:**
-   - Follow rules from loaded skills
-   - Check work against skill constraints
-   - Report violations with fixes
+When an agent starts working on a project, it scans for local skills:
 
-### Integration with Your Main Config
-
-Add to your project's `AGENTS.md` or `CLAUDE.md`:
-
-```markdown
-## UI Skills Integration
-
-When working on frontend/UI tasks, the following skills are available:
-
-### Available Skills
-- `/baseline-ui` - Tailwind + motion constraints
-- `/next-best-practices` - Next.js patterns
-- `/react-best-practices` - React architecture
-- `/frontend-design` - Anti-generic design
-- `/fixing-accessibility` - WCAG compliance
-- `/12-principles-of-animation` - Motion quality
-
-### Skill Selection Rules
-- New UI component → Load `baseline-ui` + framework skill
-- Design review → Load `frontend-design` + `baseline-ui`
-- Animation work → Load `12-principles-of-animation`
-- Accessibility audit → Load `fixing-accessibility`
-- Component library → Load `shadcn` + `baseline-ui`
-
-### Quality Gates
-Before completing UI work:
-1. Run `/baseline-ui <file>` to check constraints
-2. Verify accessibility with `/fixing-accessibility`
-3. Check motion quality (if animated)
 ```
+1. Scan ./.ai/skills/*/
+   └── Any directory with SKILL.md → Load as skill
+
+2. No local skills found?
+   └── Continue with global skills from registry
+
+3. Context detection:
+   ├── Next.js project → Load next-best-practices, baseline-ui
+   ├── React project   → Load react-best-practices, baseline-ui
+   └── Generic         → Load baseline-ui, frontend-design
+```
+
+### What install.sh Does
+
+```bash
+# 1. Creates local skill directories
+mkdir -p .ai/skills/baseline-ui/
+cp ~/Documentos/ai/ui-skills/skills/ibelick-baseline-ui.md .ai/skills/baseline-ui/SKILL.md
+
+# 2. Creates config file
+# .ai/config.toml (optional, for tooling)
+
+# 3. Updates AGENTS.md
+# Adds UI Skills section for agent reference
+
+# 4. Updates .gitignore
+# .ai/skills/ added (optional)
+```
+
+### Agent Integration
+
+Agents discover UI Skills by **scanning**, not by registry lookup:
+
+```bash
+# Agent scans for local skills
+for dir in ./.ai/skills/*/; do
+  if [ -f "$dir/SKILL.md" ]; then
+    skill_name=$(basename "$dir")
+    # Skill available as: /$skill_name
+  fi
+done
+```
+
+This means:
+- ✅ No registry edits needed
+- ✅ No global configuration
+- ✅ Skills work immediately after install
+- ✅ Each project can have different skill versions
+- ✅ No conflicts with OpenCode's core skills
 
 ## 🔄 Workflow Integration
 
